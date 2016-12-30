@@ -1,0 +1,16 @@
+function centroides=getCentroides(imagen,clases)
+
+%Se le pasa una imagen etiquetada y las etiquetas (clases)
+%Devuelve una matriz de centroides de cada clase
+
+N = length(clases);
+
+%Voy a hallar los centroides para cada clase
+for i = 1:N
+    imaTemp = imagen==clases(i);
+    masa = sum(sum())
+    
+end
+
+
+

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<!-- Website Template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Datos y Código - Detección de Gusanos</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+	<div id="header">
+		<a href="index.html" class="logo"><img src="images/logo_fing_iie.png" alt=""></a>
+		<ul>
+			<li>
+				<a href="index.html">Inicio</a>
+			</li>
+			<li>
+				<a href="procedimiento.html">Procedimiento</a>
+			</li>
+			<li>
+				<a href="resultados.html">Resultados</a>
+			</li>
+			<li class="selected">
+				<a href="datos.html">Datos y Código</a>
+			</li>
+			<li>
+				<a href="bibliografia.html">Bibliografía</a>
+			</li>
+		</ul>
+	</div>
+	<div id="body">
+		<ul>
+
+			<li>
+				<div class="article">
+					<h3>Video "original"</h3>
+					
+					<embed src="videos/convertidoSubC.avi"/>
+					<p>
+					<a href="videos/convertidoSubC.avi">Link al video.</a><br>
+					Este video es el que se utilizó como base para los algoritmos. Parte de un video original más grande, que fue submuestreado y cortado. El comando de ffmpeg utilizado fue:<br><br>
+					$ffmpeg -i convertido.avi -filter:v "setpts=0.2*PTS" -t 00:04:00 convertidoSubC.avi<br><br>
+					"convertido.avi" a su vez había sido convertido desde un ".flv" de 8GB a ".avi", y se había recortado la pantalla a la zona de interés (además del video aparecían "ventanas" del sistema operativo).
+					</p>
+				</div>
+			</li>
+
+			<li>
+				<div class="article">
+					<h3>Datos y código</h3>
+					<p>
+					Para bajar los datos y código utilizados haga click en este <a href="CodigoYDatos.zip">Link al código y los datos.</a><br>.
+					</p>
+				</div>
+			</li>
+
+
+		</ul>		
+		
+	</div>
+	<div id="footer">
+		<div>
+			<p>
+				<span>Miguel Tasende 2016</span>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

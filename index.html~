@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<!-- Website Template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Laboratory Website Template</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+	<div id="header">
+		<a href="index.html" class="logo"><img src="images/logo.png" alt=""></a>
+		<ul>
+			<li class="selected">
+				<a href="index.html">Inicio</a>
+			</li>
+			<li>
+				<a href="about.html">Problema</a>
+			</li>
+			<li>
+				<a href="services.html">Procedimiento</a>
+			</li>
+			<li>
+				<a href="location.html">Resultados</a>
+			</li>
+			<li>
+				<a href="contact.html">Datos y Código</a>
+			</li>
+			<li>
+				<a href="blog.html">Bibliografía</a>
+			</li>
+		</ul>
+	</div>
+	<div id="section">
+		<div>
+			<!--<div>
+				<h1>algo1.algo2.algo3</h1>
+				<p>
+					Blah, blah, blah.
+				</p>
+			</div>-->
+		</div>
+	</div>
+	<div id="featured">
+		<div>
+			<div class="article">
+				<h2>¡Gusanos!</h2>
+				<p>
+				Una plaga que a asolado a la humanidad desde tiempos inmemoriales. Ahora serán detectados, clasificados y perseguidos a lo largo de todo un video, en una gota de agua!	
+				</p>
+			</div>
+			
+		</div>
+	</div>
+	<div id="footer">
+		<div>
+			<p>
+				<span>Miguel Tasende 2016</span>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

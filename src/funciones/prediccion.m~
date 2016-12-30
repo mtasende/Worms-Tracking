@@ -1,0 +1,15 @@
+function preds = prediccion(tracks,t)
+%Inicialmente, tomo lo mas facil. Estimo velocidad con los 2 anteriores.
+%Si alguno de los anteriores no esta definido (= -1) la prediccion es que
+%se queda quieto
+
+[N,d,T] = size(tracks); %Cant. de tracks, dim=2, cant. de frames = t-1 (en principio...)
+
+preds = ones(N,d)*(-1); %Por las dudas pongo el valor de "indefinido"
+
+for i=1:N
+    if(tracks(i,1,t-2)==-1 || tracks(i,1,t-1)==-1)
+        preds(i,:) = tracks(i,:,t-1);
+    else
+        preds(i)
+

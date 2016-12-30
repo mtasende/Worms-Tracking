@@ -1,0 +1,5 @@
+Antes de correr el script main.m se deberá editar y definir la variable "os" si usted utiliza el sistema operativo Windows. Los scripts fueron probados en Linux.
+os = 'win' para Windows
+os = 'lin' para Linux o cualquier otro SO tipo Unix
+
+Luego se puede ejecutar main.m

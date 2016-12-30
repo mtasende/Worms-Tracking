@@ -1,0 +1,60 @@
+function plotTracks(tracks,sombra,nomFrames)
+
+M = size(tracks,3); %Cantidad de frames
+
+%Voy a elegir colores en un cuadrante de esfera (espacio r,g,b)
+%Por desgracia este metodo no los elige equiespaciados. Hay mucho azul...
+N = size(tracks(:,:,1),1); %Cantidad de tracks total. No deberia variar
+n = ceil(sqrt(N));
+
+epsilon = pi/20;
+theta = linspace(epsilon,(pi/2)-epsilon,n);
+fi = linspace(epsilon,(pi/2)-epsilon,n);
+
+r = cos(fi)'*cos(theta);
+g = sin(fi)'*cos(theta);
+b = ones(n,1)*sin(theta);
+
+rr = r(:);
+gg = g(:);
+bb = b(:);
+%--------------------------------------------------------------------------
+
+%aviobj = avifile('../videos/trackingBasico.avi','FPS',2) %Para grabar video
+%aviobj = avifile('../videos/trackingBasico2Crea.avi','FPS',2) %Para grabar video
+%aviobj = avifile('../videos/trackingBasico3Pred.avi','FPS',2) %Para grabar
+%aviobj = avifile('../videos/trackingMedio1.avi','FPS',2) %Para grabar
+%aviobj = avifile('../videos/trackingMedio10000.avi','FPS',2) %Para grabar
+aviobj = avifile('../videos/trackingMedio2500_5.avi','FPS',2) %Para grabar
+aviobj = avifile('../videos/trackingMedio2500_5.avi','FPS',2) %Para grabar
+%video
+for f = 1:M
+    
+    tracksActuales = tracks(:,:,f);
+    
+    frameActual = imread(['../frames3/' nomFrames(f).name]);
+    imshow(frameActual)
+    hold on
+    
+    for i=1:N
+        %Calculo donde empezo el track, o la sombra (a mejorar para tener en cuenta -1s)
+        %Encuentro el inicio del track
+        iniTrack = find(tracks(i,1,:)~=-1,1);
+        iniPlot = max(iniTrack,f-sombra);
+        
+        %Encuentro el fin del track
+        finTrack = find(tracks(i,1,:)~=-1,1,'last');
+        finPlot = min(finTrack,f);
+    
+        tx = tracks(i,2,iniPlot:finPlot);
+        ty = tracks(i,1,iniPlot:finPlot);
+        plot(tx(:),ty(:),'*','Color',[rr(i) gg(i) bb(i)])
+        plot(tx(:),ty(:),'Color',[rr(i) gg(i) bb(i)])
+    end
+    
+    fr = getframe; %Para grabar video
+    aviobj = addframe(aviobj,fr); %Para grabar video
+
+    %pause
+end
+aviobj = close(aviobj); %Para grabar video

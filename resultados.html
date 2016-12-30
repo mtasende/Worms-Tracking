@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<!-- Website Template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Resultados - Detección de Gusanos</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+	<div id="header">
+		<a href="index.html" class="logo"><img src="images/logo_fing_iie.png" alt=""></a>
+		<ul>
+			<li>
+				<a href="index.html">Inicio</a>
+			</li>
+			<li>
+				<a href="procedimiento.html">Procedimiento</a>
+			</li>
+			<li class="selected">
+				<a href="resultados.html">Resultados</a>
+			</li>
+			<li>
+				<a href="datos.html">Datos y Código</a>
+			</li>
+			<li>
+				<a href="bibliografia.html">Bibliografía</a>
+			</li>
+		</ul>
+	</div>
+
+	<div id="body">
+		<ul>
+
+			<li>
+					<h3>Video con el resultado de la primera etapa</h3>
+					<video width="800" height="600" controls>
+  						<source src="videos/prueba3.mp4" type="video/mp4">
+						Intente con el link...
+					</video>		
+				<div class="article">
+			
+					<p>
+					En este video se ven los resultados luego de la segmentación y detección de regiones, en las pruebas iniciales. Si no puede ver el video en su navegador, intente guardando el enlace a este <a href="videos/prueba3.mp4">link</a>, y reprodúzcalo en su programa preferido de visualización de videos.
+					</p>
+				</div>
+			</li>
+
+			<li>
+					<h3>Cálculo de centroides "bruto"</h3>
+					<video width="800" height="600" controls>
+  						<source src="videos/deteccion.mp4" type="video/mp4">
+						Intente con el link...
+					</video>
+				<div class="article">
+					<p>
+					En este video se ve lo mismo que en el anterior, pero luego de calcular las posiciones de los centroides de cada región. Este video se realizó con 80 frames de las 481 utilizadas. Si no puede ver el video en su navegador, se puede bajar en el siguiente <a href="videos/deteccion.mp4">link</a>. En esta etapa todavía no se realizaron estimaciones de posición siguiente o tracking.
+					</p>
+				</div>
+			</li>
+
+
+
+			<li>
+				<div class="article">
+					<h3>Evaluación de centroides "brutos"</h3>
+
+					<img src="images/evalFrame201.jpg" alt="">
+					<img src="images/evalFrame202.jpg" alt="">
+					<img src="images/evalFrame203.jpg" alt="">
+					<img src="images/evalFrame204.jpg" alt="">
+
+					<p>
+					En las figuras de arriba se comparó las posiciones detectadas para los centroides (antes del tracking), y las imágenes de evaluación (marcadas "a mano", en verde). Las mismas imágenes de evaluación tienen sus fallas debidas al procedimiento de marcado, y a la dificultad del problema de detectar los gusanos, en sí. Se puede ver que los centroides detectados coinciden con regiones marcadas como "gusano" en las imágenes de evaluación. Se ve que hay gusanos que no son detectados en algunos de los frames pero sí en otros, y algunos que no son detectados en ningún frame (se ven 2 de esos). Entre los que no son detectados en ninguno de esos frames, se observó que el gusano de la derecha, es muy lento, y recién comienza a moverse bastante después, en el video. También se pueden observar "gusanos dobles", es decir pares de gusanos que se detectan como uno sólo por estar muy cerca. Todo esto es en la etapa previa al tracking.
+					</p>
+				</div>
+			</li>
+
+
+
+			<li>
+				<div class="article">
+					<h3>Número de Regiones Brutas</h3>
+					
+					<img src="images/numeroRegiones.jpg" alt="">
+
+					<p>
+ 					Con el dato de la cantidad de regiones "brutas", es decir antes de cualquier intento de relacionar los diferentes frames (antes del tracking), se graficó el número de regiones detectadas por frame, para los 481 frames. Hay que tener en cuenta que se utilizó k=20, por lo que se descartan los primeros y las últimos 20 frames. En total quedan 441 frames. Ya de estos datos, tomando máximos en x frames, y posiblemente luego promedios o medianas entre y máximos (por poner un ejemplo), o utilizando algún método estadístico, se podría conseguir información sobre "el rechazo" o "no rechazo" de los gusanos, a permanecer en la gota. Sin embargo, seguramente se obtienen mejores datos con el tracking.
+					</p>
+				</div>
+			</li>
+			
+			<li>
+					<h3>Tracking Básico</h3>
+					
+					<video width="800" height="600" controls>
+  						<source src="videos/trackingBasico3Pred.mp4" type="video/mp4">
+						Intente con el link...
+					</video>
+				<div class="article">
+
+					<p>
+					El video puede bajarse desde este <a href="videos/trackingBasico3Pred.mp4">link</a>. En este video se muestra el resultado de un algoritmo de tracking básico. No se destruyen tracks, y se predice de forma muy simple.
+					Las asignaciones se hacen por "centroide más cercano".
+					</p>
+				</div>
+			</li>
+			
+			<li>
+				<h3>Tracking Mejorado</h3>
+				<video width="800" height="600" controls>
+  						<source src="videos/trackingMedio2500_5.mp4" type="video/mp4">
+						Intente con el link...
+				</video>
+				
+				<div class="article">
+
+					<p>
+					El video de arriba puede bajarse desde este <a href="videos/trackingMedio2500_5.mp4">link</a>. Aquí se muestra el último algoritmo implementado (ver "procedimiento" para la explicación). Este muestra el resultado con radio (cuadrático) de tolerancia 2500, y 5 frames de tolerancia para tracks perdidos.<br>
+					Abajo se agregaron los casos con r=10000, tolPerdido=3 (por el radio grande los tracks saltan, de vez en cuando), y el caso r=2000, tolPerdido=3 (mueren muchos tracks). Modificando estos valores se esperaría que 
+					se pueda mejorar la estimación. Para este algoritmo no se utilizó un predictor (sólo la posición previa del track) debido a falta de tiempo y cambios "técnicos" en la implementación (que requerirían modificar bastante la 
+					función de predicción). 
+					</p>
+				</div>
+					<video width="800" height="600" controls>
+  						<source src="videos/trackingMedio10000.mp4" type="video/mp4">
+						Intente con el link...
+					</video><br>
+					<a href="videos/trackingMedio10000.mp4">link</a>
+					<br><br>
+					<video width="800" height="600" controls>
+  						<source src="videos/trackingMedio1.mp4" type="video/mp4">
+						Intente con el link...
+					</video> <br>
+					<a href="videos/trackingMedio1.mp4">link</a>
+			</li>
+			
+			<li>
+					<h3>Resultado Final y Conteo de Gusanos</h3>
+					<video width="800" height="600" controls>
+  						<source src="videos/trackingMedio2500_5Total.mp4" type="video/mp4">
+						Intente con el link...
+					</video><br>
+					<a href="videos/trackingMedio2500_5Total.mp4">link</a>
+				<div class="article">
+					<p>
+					Por último se incluye el video completo, con los 441 frames y la gráfica de conteo de gusanos con radio=2500 px^2, tolerancia a perdidos= 5 frames. Se la compara con la gráfica de conteo de regiones original.  
+					</p>
+				</div>
+				<img src="images/trackinMedio2500_5Total.jpg" alt="">
+				<div class="article">
+					<p>
+					Se puede ver que la intuición original de que la cantidad real de gusanos es "algo parecido a tomar el máximo de las regiones entre algunos frames" es bastante aceptable, comparado con los resultados del tracking.
+					Esto se debe a que la principal causa de error en el conteo de regiones (respecto al conteo de "gusanos") es la "unión" de gusanos (es decir que se estima más de un gusano en la misma región).
+					Da la impresión de que el algoritmo de tracking evita esa confusión bastante bien.
+					A pesar de eso, en el video se ve que el tracking está muy lejos de ser perfecto (o bueno, como tracking en sí). En particular se "mueren" tracks en gusanos que después crean tracks nuevos, y muchas veces los gusanos
+					que salen de un cruce se identifican mal ("se cruzan las identidades" de los gusanos). Pero esos problemas no afectan al conteo de la cantidad de gusanos por frame. Si se quisiera estimar la permanencia promedio de los gusanos, tomando las permanencias de cada uno,
+					sería necesario tener un tracking mejor (para que estuvieran bien individualizados durante todo el video). Varias de las ideas expresadas anteriormente, o en la sección de "procedimiento" podrían ser útiles para eso.
+					</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div id="footer">
+		<div>
+			<p>
+				<span>Miguel Tasende 2016</span>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

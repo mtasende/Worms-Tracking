@@ -1,0 +1,35 @@
+function imaRes = mostrarGusanos(imagen,X,contorno)
+%Funcion que devuelve la imagen con los gusanos dado un vector de celdas "gusano"
+%Se puede pedir el contorno o el area (contorno='si')
+
+imaTemp = imagen;
+N = length(X);
+
+r = imaTemp(:,:,1);
+g = imaTemp(:,:,2);
+b = imaTemp(:,:,3);
+
+for i=1:N
+    v = X{i};
+    x = v(:,1);
+    y = v(:,2);
+    
+    [Ly,Lx] = size(r);
+    xima = 1:Lx;
+    yima = 1:Ly;
+    
+    [xx yy] = meshgrid(xima,yima); 
+    rGusano = inpolygon(xx,yy,x,y);
+    gGusano = inpolygon(xx,yy,x,y);
+    bGusano = inpolygon(xx,yy,x,y);
+    r(rGusano) = 0;
+    g(gGusano) = 255;
+    b(bGusano) = 0;
+
+end
+
+imaTemp(:,:,1) = r;imaTemp(:,:,2) = g;
+    imaTemp(:,:,3) = b;
+
+
+

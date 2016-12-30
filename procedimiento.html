@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<!-- Website Template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Procedimiento - Detección de Gusanos</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+	<div id="header">
+		<a href="index.html" class="logo"><img src="images/logo_fing_iie.png" alt=""></a>
+		<ul>
+			<li>
+				<a href="index.html">Inicio</a>
+			</li>
+			<li class="selected">
+				<a href="procedimiento.html">Procedimiento</a>
+			</li>
+			<li>
+				<a href="resultados.html">Resultados</a>
+			</li>
+			<li>
+				<a href="datos.html">Datos y Código</a>
+			</li>
+			<li>
+				<a href="bibliografia.html">Bibliografía</a>
+			</li>
+		</ul>
+	</div>
+	<div id="body">
+		<ul>
+			<li>
+				<div class="figure">
+					<span>Imagen quieta</span> <img src="images/frame206.jpg" alt="">
+				</div>
+			</li>
+			<li>
+				<div class="article">
+					<h3>Análisis Inicial</h3>
+					<p>
+						Inicialmente se observan los videos e imágenes y se intenta detectar a los gusanos “visualmente”. Se observa que los gusanos tienen un color bastante parecido al fondo, y sobre todo un color y forma muy parecido a los rastros que dejan. Al intentar detectar gusanos visualmente en una imagen quieta, se concluye que es una tarea muy difícil, y que la detección “humana” de los gusanos se basa fuertemente en el movimiento de los mismos. Por eso se tomó como hipótesis que esa sería la principal herramienta para la detección automática también.
+	Como paso previo a la detección por el movimiento (eliminación de fondo), se podría aprovechar que se tienen imágenes en color, conseguir muestras de imágenes de gusanos sin fondo (manualmente), y codificar la imágenes en escala de grises según la distancia de Mahalanobis al “color gusano”, en vez de la escala de grises estándar de la función “rgb2gray” de Matlab (que no tiene en cuenta el “color gusano”). Esto no se realizó por falta de tiempo, ya que el etiquetado manual de los gusanos es una tarea tediosa, y porque se consideró que era un posible agregado posterior, pero no se cree que aporte la información más escencial para la detección.
+	El etiquetado de los gusanos manualmente es un problema también para la validación. Finalmente se etiquetaron algunas imágenes y se contrastó con los resultados, pero el conjunto es pequeño, y sería bueno contar con más.
+					</p>
+				</div>
+			</li>
+
+			<li>
+				<div class="figure">
+					<span>Transformaciones Iniciales</span> <img src="images/cuatroVentanasFrame04_mod.jpg" alt="">
+				</div>
+			</li>
+
+			<li>
+				<div class="article">
+					<h3>Eliminación de Fondo</h3>
+					<p>
+						Para la eliminación de fondo se utilizó la mediana centrada de 2k+1 frames. Primero se había probado restando la mediana de los últimos k frames, pero el problema eran los “rastros” que dejan los gusanos. La imagen del gusano "se mueve", es decir que desaparece de los frames anteriores y aparece en los posteriores. Sin embargo, el rastro sólo "aparece", por lo tanto es posible distinguirlos. Pero si sólo se utilizan frames anteriores para la estimación de fondo no es posible distinguir al gusano del último tramo de "rastro de gusano" (ese último no estaba en ninguna de los frames anteriores y "aparece" en la última, igual que el gusano). Para lograr eliminar ese último tramo de "rastro" se utilizan los frames posteriores. Si la mediana está perfectamente centrada (k frames anteriores, k frames posteriores, y el frame actual), lo que se detecta es sólo aquello que "apareció en el frame actual y después desapareció" (a grandes rasgos). El último tramo de "rastro" se encuentra en el frame actual y en los k posteriores, por lo tanto en k+1 frames, y es de esperar que la mediana lo tome como "fondo". Por otro lado el gusano sólo aparecerá en la posición del frame actual, en unos pocos frames (menos que k frames, si se elige k bien), y no será tomado como fondo. Es importante que la elección del valor de k se haga de acuerdo a la velocidad que tiene el gusano. Debido a que se observaron algunos gusanos con velocidades mucho menores a los otros, se deduce que éstos son muy difíciles de detectar (en la práctica se vio un sólo caso, mientras que la mayoría parecen tener una velocidad más o menos parecida). En cuanto a los "rastros" posteriores, si se tomaran más frames posteriores éstos podrían aparecer como parte del fondo, y ser restados a la imagen actual (que todavía no los contiene, por lo que se vería una "sombra negativa"). Sin embargo esos rastros sólo aparecen en k frames, mientras que no aparecen en k+1 frames (las anteriores y la actual), por lo que la mediana los debería eliminar. Por eso es importante que la mediana esté perfectamente centrada. En la práctica funciona como se esperaba.
+					</p>
+				</div>
+			</li>
+
+
+
+			<li>
+				<div class="article">
+					<h3>Umbralización y Operaciones Morfológicas</h3>
+					<p>
+					Luego de restar el fondo, se realiza una umbralización, y algunas operaciones morfológicas. El umbral, por el momento, es elegido "a mano" en la variable "umbral" de la función "detectar".
+					Después de la umbralización, se realiza la operación morfológica de "cerradura", debido a que los gusanos quedan "partidos". 
+					También se debe elegir el tamaño del disco con el que se hace la "cerradura". En este caso se utilizó un umbral de -17, y un tamaño de disco de 6.
+					Hay un compromiso entre el valor del umbral y el tamaño del disco para la "cerradura". Si se baja el umbral, se debe aumentar el tamaño del disco, y viceversa; incluso, se puede utilizar la operación de apertura, si el umbral es muy alto.
+					</p>
+				</div>
+			</li>
+
+
+
+			<li>
+				<div class="article">
+					<h3>Segmentación y filtrado de regiones chicas</h3>
+					<p>
+					Lo siguiente es segmentar la imagen con la función "etiquetar" implementada en ejercicios anteriores del curso.
+					Después del etiquetado se descartan las regiones que tienen un tamaño menor a un criterio.
+					Ese criterio puede ser respecto de la región de mayor tamaño, o de la media del tamaño de las regiones, y hay que elegir un parámetro, que determina el umbral de qué porcentaje de ese tamaño es aceptable para un "posible gusano".
+					En este caso se eligió 80% de la media de las regiones (luego de probar con varias opciones).
+					De este filtrado se encarga la función "soloGrandes". 
+					</p>
+				</div>
+			</li>
+
+
+
+			<li>
+				<div class="article">
+					<h3>Cálculo de Centroides</h3>
+					<p>
+					Después se calcularon los centroides de cada región "aceptada". Se probaron dos posibles funciones (cambiando el orden de los loops; una de ellas itera en las regiones, y la otra itera en los píxels de la imagen).
+					La segunda fue mucho mejor, en cuanto a velocidad, que la primera (era la idea). La primera no hubiera sido utilizable en la práctica para un video (la segunda sí).
+					<br><br>
+					Elapsed time is 7.072411 seconds.  --- getCentroides <br>
+					Elapsed time is 0.097427 seconds.  --- getCentroidesR
+					</p>
+				</div>
+			</li>
+
+
+
+			<li>
+				<div class="article">
+					<h3>Seguimiento 1 (Tracking)</h3>
+					<p>
+					Se implementaron algunos algoritmos de seguimiento, refinándolos cada vez más. Los elementos fundamentales de cada algoritmo son 2:<br>
+					1) Reglas de creación, destrucción y asignación a tracks.<br>
+					2) Modelo de predicción de la próxima posición, y posible "corrector" de posición luego de la asignación.<br><br>
+					Inicialmente se utilizó el modelo más simple: Se toman los centroides del primer frame como inicio de "tracks" y no se crean tracks nuevos.
+					Se calcula la matriz de distancias entre los puntos previos de los tracks y los actuales. Se asigna el centroide más cercano a cada track,
+					permitiendo repetición de asignación. No hay creación de tracks. Este modelo, muy simple, ya da algunos resultados visualmente interesantes,
+					pero fue creado únicamente para tener un "prototipo" a mejorar. El resultado se puede ver en el video de abajo. 
+					Para no llenar la imagen de "tracks" sólo se muestra "la sombra" durante 20 frames (esto se puede cambiar con el parámetro "sombra" de la función "plotTracks").
+					Si no puede verlo, bajarlo en este 
+					<a href="videos/trackingBasico.mp4">link</a>
+					</p>
+				</div>
+				
+				<video width="800" height="600" controls>
+  					<source src="videos/trackingBasico.mp4" type="video/mp4">
+					Intente con el link...
+				</video>
+
+			</li>
+			
+			
+			<li>
+				<div class="article">
+					<h3>Seguimiento 2 (Tracking)</h3>
+					<p>
+					El paso siguiente fue agregar la regla: "Los nuevos centroides no asignados generan un track nuevo. Claramente, ahora habrá demasiados tracks.
+					En esta etapa no se mejora la estimación, sólo las reglas.					
+					El resultado se puede ver en el video de abajo. Si no puede verlo, bajarlo en este <a href="videos/trackingBasico2Crea.mp4">link</a>
+					</p>
+				</div>
+				
+				<video width="800" height="600" controls>
+  					<source src="videos/trackingBasico2Crea.mp4" type="video/mp4">
+					Intente con el link...
+				</video>
+				
+			</li>
+			
+			<li>
+				<div class="article">
+					<h3>Seguimiento 3 (Tracking)</h3>
+					<p>
+					En esta etapa, se mejora la predicción de posición en el siguiente frame, adoptando un modelo de velocidad constante, respecto a los dos frames anteriores.
+					Se pretende, luego, usar este modelo para un filtro de Kalman.				
+					El resultado se puede ver en el video de abajo. Si no puede verlo, bajarlo en este <a href="videos/trackingBasico3Pred.mp4">link</a>
+					</p>
+				</div>
+				
+				<video width="800" height="600" controls>
+  					<source src="videos/trackingBasico3Pred.mp4" type="video/mp4">
+					Intente con el link...
+				</video>
+				
+			</li>
+			
+			<li>
+				<div class="article">
+					<h3>Seguimiento 4 (Tracking)</h3>
+					<p>
+					Por último se utilizó una versión del algoritmo húngaro para la asignación de tracks (con Copyright (c) 2009, Yi Cao). Se estableció que los tracks que no fueran asignados entrarían en estado
+					de "perdidos", y lo mismo con los que fueran asignados a un punto muy lejano (según un radio de tolerancia). Si un track permanece perdido durante más de ciertos frames, se lo da por muerto.
+					Los tracks muertos nunca reviven, y no se tienen en cuenta para las asignaciones a centroides. El resultado con radio cuadrático (se usan distancias cuadraticas para ahorrar calcular raíces cuadradas) de 
+					2500, y con tolerancia a tracks perdidos por 5 frames, se puede ver abajo. En este algoritmo la predicción (modelo físico) es la posición previa (debido a que los cambios en la asignación complicarían cambiar
+					la función de predicción, y no se cuenta con suficiente tiempo). 	
+					Si no puede ver el video, bajarlo en este <a href="videos/trackingMedio2500_5.mp4">link</a>
+					</p>
+				</div>
+				
+				<video width="800" height="600" controls>
+  					<source src="videos/trackingMedio2500_5.mp4" type="video/mp4">
+					Intente con el link...
+				</video>
+				
+			</li>
+		</ul>
+	</div>
+	<div id="footer">
+		<div>
+			<p>
+				<span>Miguel Tasende 2016</span>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

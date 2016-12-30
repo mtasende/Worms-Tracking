@@ -1,0 +1,27 @@
+function tracks = tracking(centroides)
+
+%Tracks en un array de celdas. Hay una celda para cada instante de tiempo.
+% Cada celda contiene una matriz de Nx2, donde N es el numero de tracks 
+% activos en ese instante de tiempo.
+
+T = length(centroides);
+
+%Primero asigno todos los centroides a un track
+tracks{1} = centroides{1};
+pred = tracks{1}; % Se predicen los mismos centroides para t=1, porque no hay anteriores
+
+for t = 2:T
+    N = size(tracks{t-},1);
+    dists = matrizDist(pred,centroides{t});
+    for i = 1:N
+        [min,jMin] = min(dists(i,:)); %Inicialmente me quedo con el que este mas cerca, con repeticion posible
+        tracks{t}(i,:) = centroides{t}(jMin,:);
+    end
+    
+    %Refinar estimacion
+    
+    %Hacer las nuevas predicciones
+    pred = tracks{t};
+end
+
+
